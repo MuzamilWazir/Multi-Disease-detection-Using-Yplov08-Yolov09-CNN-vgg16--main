@@ -1,9 +1,8 @@
-
 import argparse
 import io
 from PIL import Image
 import datetime
- 
+
 import torch
 import cv2
 import numpy as np
@@ -24,6 +23,9 @@ from ultralytics import YOLO
 
 
 app = Flask(__name__)
+
+# Load the model once at startup instead of on every request
+model = YOLO('yolov8n.pt')
 
 
 @app.route("/")
@@ -49,8 +51,6 @@ def predict_img():
             if file_extension == 'jpg':
                 img = cv2.imread(filepath)
 
-               
-                model = YOLO('yolov8n.pt')
                 detections =  model(img, save=True) 
                 return display(f.filename)
             
@@ -65,22 +65,18 @@ def predict_img():
                
                 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
                 out = cv2.VideoWriter('output.mp4', fourcc, 30.0, (frame_width, frame_height))
-                model = YOLO('yolov8n.pt')
                 
                 while cap.isOpened():
                     ret, frame = cap.read()
                     if not ret:
                         break                                                      
 
-                    model = YOLO('yolov8n.pt')
                     results = model(frame, save=True)  
                     print(results)
                     cv2.waitKey(1)
 
                     res_plotted = results[0].plot()
-                    cv2.imshow("result", res_plotted)
-                    
-                
+
                     out.write(res_plotted)
 
                     if cv2.waitKey(1) == ord('q'):
@@ -151,5 +147,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Flask app exposing yolov8 models")
     parser.add_argument("--port", default=5000, type=int, help="port number")
     args = parser.parse_args()
-    model = YOLO('yolov8n.pt')
-    app.run(host="0.0.0.0", port=args.port) 
+    app.run(host="0.0.0.0", port=args.port)
