@@ -3,21 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Disease Detection{% endblock %}</title>
 
-    <title>
-      FYP - {% block title %}{% endblock %} Apricot Disease Detection
-    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg: #F6F7F5;
+        --surface: #FFFFFF;
+        --ink: #14181A;
+        --muted: #6B7178;
+        --border: #E3E6E2;
+        --accent: #0F5C4C;
+        --accent-soft: #E7F2EF;
+        --radius: 14px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+      }
+      h1, h2, h3 { font-family: 'Space Grotesk', 'Inter', sans-serif; margin: 0; }
+      .mono { font-family: 'JetBrains Mono', monospace; }
+      a { color: inherit; }
+      button { font-family: inherit; }
+      ::selection { background: var(--accent-soft); }
+    </style>
 
     {% block stylesheets %}{% endblock stylesheets %}
   </head>
-  <body class="hold-transition {% block body_class %}{% endblock body_class %}">
-    <div class="wrapper">
-      {% include 'navigation.html' %} {% include 'sidebar.html' %} {% block
-      content %}{% endblock content %} {% include 'footer.html' %}
-
-      <aside class="control-sidebar control-sidebar-dark"></aside>
-    </div>
-
+  <body>
+    {% block content %}{% endblock content %}
     {% block javascripts %}{% endblock javascripts %}
   </body>
 </html>
