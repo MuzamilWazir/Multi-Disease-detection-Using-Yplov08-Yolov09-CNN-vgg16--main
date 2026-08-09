@@ -1,1 +1,1 @@
-web: gunicorn webapp:app --bind 0.0.0.0:$PORT --timeout 300
+web: PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 gunicorn webapp:app --bind 0.0.0.0:$PORT --timeout 300 --max-requests 20 --max-requests-jitter 5
