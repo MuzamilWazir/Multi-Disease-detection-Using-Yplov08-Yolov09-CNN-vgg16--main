@@ -1,192 +1,135 @@
 {% extends "base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
-
-
-{% block body_class %} sidebar-mini {% endblock body_class %} 
-
-
-{% block stylesheets %}
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css"> 
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/jqvmap/jqvmap.min.css">
-  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/daterangepicker/daterangepicker.css">
-  <link rel="stylesheet" href="/static/assets/plugins/summernote/summernote-bs4.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-{% endblock stylesheets %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
-  
-  <div class="content-wrapper">
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Apricot Disease Detection Dashboard</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-              <li class="breadcrumb-item active">View Detected Image</li>
-            </ol>
-          </div>
+
+<div style="max-width: 1120px; margin: 0 auto; padding: 48px 24px 80px;">
+
+  <!-- Header -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M3 12h4M17 12h4M12 3v4M12 17v4"></path>
+        </svg>
+      </div>
+      <h1 style="font-size: 20px; font-weight: 600;">Disease Detection</h1>
+    </div>
+    <div class="mono" style="display: flex; align-items: center; gap: 8px; background: var(--accent-soft); color: var(--accent); padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+      <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>
+      YOLOv8 MODEL READY
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;" class="dd-grid">
+
+    <!-- Upload card -->
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: 0 1px 2px rgba(20,24,26,0.04);">
+      <div class="mono" style="font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 6px;">STEP 01</div>
+      <h2 style="font-size: 18px; margin-bottom: 20px;">Upload image or video</h2>
+
+      <form method="post" enctype="multipart/form-data" name="form1" id="detect-form">
+
+        <label for="inputfile" id="dropzone" style="display: block; position: relative; border: 2px dashed var(--border); border-radius: 10px; padding: 44px 20px; text-align: center; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease;">
+
+          <span style="position: absolute; top: 10px; left: 10px; width: 14px; height: 14px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); opacity: 0.5;"></span>
+          <span style="position: absolute; top: 10px; right: 10px; width: 14px; height: 14px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); opacity: 0.5;"></span>
+          <span style="position: absolute; bottom: 10px; left: 10px; width: 14px; height: 14px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); opacity: 0.5;"></span>
+          <span style="position: absolute; bottom: 10px; right: 10px; width: 14px; height: 14px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); opacity: 0.5;"></span>
+
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6B7178" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px;">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+
+          <div style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">Click to browse, or drag a file here</div>
+          <div class="mono" style="font-size: 12px; color: var(--muted);">Supports .jpg and .mp4</div>
+
+          <input type="file" name="file" id="inputfile" accept=".jpg,.jpeg,.mp4" style="position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden;" required>
+        </label>
+
+        <div id="file-name-display" class="mono" style="font-size: 13px; color: var(--muted); margin-top: 12px; min-height: 18px;"></div>
+
+        <button type="submit" id="submit-btn" style="width: 100%; margin-top: 20px; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s ease;">
+          Run detection
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Results card -->
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: 0 1px 2px rgba(20,24,26,0.04);">
+      <div class="mono" style="font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 6px;">STEP 02</div>
+      <h2 style="font-size: 18px; margin-bottom: 20px;">Results</h2>
+
+      <div style="position: relative; min-height: 260px; border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--bg);">
+
+        <span style="position: absolute; top: 10px; left: 10px; width: 14px; height: 14px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); opacity: 0.5;"></span>
+        <span style="position: absolute; top: 10px; right: 10px; width: 14px; height: 14px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); opacity: 0.5;"></span>
+        <span style="position: absolute; bottom: 10px; left: 10px; width: 14px; height: 14px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); opacity: 0.5;"></span>
+        <span style="position: absolute; bottom: 10px; right: 10px; width: 14px; height: 14px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); opacity: 0.5;"></span>
+
+        <div id="empty-state" style="text-align: center; color: var(--muted); padding: 20px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6B7178" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 10px;">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <circle cx="9" cy="9" r="2"></circle>
+            <path d="M21 15l-5-5L5 21"></path>
+          </svg>
+          <div style="font-size: 13px;">Detected output will appear here</div>
         </div>
+
+        <img id="my-image" src="{{ url_for('predict_img', filename=image_path) }}" style="max-width: 100%; max-height: 500px; display: none;"/>
+        <img id="my-video-image" src="{{ url_for('video_feed') }}" style="max-width: 100%; max-height: 500px; display: none;"/>
+
       </div>
     </div>
-    
-    <section class="content">
-      <div class="container-fluid">
-        
-         <div class="row">
-       
-          
-        </div>
-        
-		
-       
-        <div class="row">
-          
-          <section class="col-lg-6 connectedSortable">
-            
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  Apricot Disease Detection
-                </h3>
-				
-                
-              </div>
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  
-                  <div class="chart tab-pane active" id="revenue-chart"
-                        style="position: relative; height: 700px;">
-            
-			
-				 
-				   <form class="form-signin col-lg-3" method=post enctype=multipart/form-data name="form1">
-       
-        <h1 class="h3 mb-3 font-weight-normal">Upload any image or video</h1>
-     <input type="file" name="file" class="form-control-file" id="inputfile" >
-
-        <br/>
-		    
-        <button class="btn btn-block btn-default btn-sm " type="submit">Upload</button>
-  
-    </form>
-
-	
-	
-	
-
-                 
-                </div>
-              </div>
-            </div>
-            
-
-            
-      
-          </section>
-		  
-		  
-		            <section class="col-lg-6 connectedSortable">
-           
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                 Video Results
-                </h3>
-				
-                
-              </div>
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  
-                  <div class="chart tab-pane active" id="revenue-chart"
-                        style="position: relative; height: 700px;">
-            
-			
-
-
-
-<img id="my-image"  src="{{ url_for('predict_img', filename=image_path) }}" style="height:640; width:640px; display: none;"/> 
-
-<script>
-document.getElementById("my-image").onload = function() {
-  this.style.display = "block";
-};
-</script>
-
-
-<img id="my-video-image" src="{{ url_for('video_feed') }}" style="height:640; width:640px; display: none;" />
-
-<script>
-document.getElementById("my-video-image").onload = function() {
-  this.style.display = "block";
-};
-</script>
-
-
-
-                    </div>
-                 
-                </div>
-              </div>
-            </div>
-          
-
-            
-      
-          </section>
-		  
-		  
-		  
-        
-        </div>
-       
-      </div>
-    </section>
-   
 
   </div>
+</div>
+
+<style>
+  @media (max-width: 860px) {
+    .dd-grid { grid-template-columns: 1fr !important; }
+  }
+  #dropzone:hover { border-color: var(--accent); background: var(--accent-soft); }
+  #submit-btn:hover { background: #0c4a3d; }
+  #submit-btn:disabled { background: #A9B0AC; cursor: not-allowed; }
+</style>
 
 {% endblock content %}
 
-
 {% block javascripts %}
+<script>
+  var input = document.getElementById('inputfile');
+  var nameDisplay = document.getElementById('file-name-display');
+  var form = document.getElementById('detect-form');
+  var submitBtn = document.getElementById('submit-btn');
 
- 
-  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
-  <script src="/static/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
- 
-  <script>
-    $.widget.bridge('uibutton', $.ui.button)
-  </script>
+  input.addEventListener('change', function () {
+    if (input.files && input.files.length > 0) {
+      nameDisplay.textContent = 'Selected: ' + input.files[0].name;
+    } else {
+      nameDisplay.textContent = '';
+    }
+  });
 
-  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/static/assets/plugins/chart.js/Chart.min.js"></script>
-  <script src="/static/assets/plugins/sparklines/sparkline.js"></script>
-  <script src="/static/assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-  <script src="/static/assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-  <script src="/static/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
-  <script src="/static/assets/plugins/moment/moment.min.js"></script>
-  <script src="/static/assets/plugins/daterangepicker/daterangepicker.js"></script>
-  <script src="/static/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-  <script src="/static/assets/plugins/summernote/summernote-bs4.min.js"></script>
-  <script src="/static/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-  <script src="/static/assets/js/adminlte.js"></script>
-  <script src="/static/assets/js/pages/dashboard.js"></script>
-  <script src="/static/assets/js/demo.js"></script>
+  form.addEventListener('submit', function () {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing…';
+  });
 
+  document.getElementById('my-image').onload = function () {
+    this.style.display = 'block';
+    document.getElementById('empty-state').style.display = 'none';
+  };
+
+  document.getElementById('my-video-image').onload = function () {
+    this.style.display = 'block';
+    document.getElementById('empty-state').style.display = 'none';
+  };
+</script>
 {% endblock javascripts %}
