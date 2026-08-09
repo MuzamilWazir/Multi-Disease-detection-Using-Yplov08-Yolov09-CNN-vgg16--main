@@ -4,6 +4,7 @@ from PIL import Image
 import datetime
 
 import torch
+torch.set_num_threads(1)
 import cv2
 import numpy as np
 from re import DEBUG, sub
@@ -51,7 +52,20 @@ def predict_img():
             if file_extension == 'jpg':
                 img = cv2.imread(filepath)
 
-                detections =  model(img, save=True) 
+                # Downscale large images before detection to reduce peak memory
+                max_dim = 1280
+                h, w = img.shape[:2]
+                if max(h, w) > max_dim:
+                    scale = max_dim / max(h, w)
+                    img = cv2.resize(img, (int(w * scale), int(h * scale)))
+
+                detections = model(img, save=True, imgsz=640)
+
+                # Free memory before returning
+                del img, detections
+                import gc
+                gc.collect()
+
                 return display(f.filename)
             
             elif file_extension == 'mp4': 
@@ -95,7 +109,11 @@ def predict_img():
 @app.route('/<path:filename>')
 def display(filename):
     folder_path = 'runs/detect'
-    subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]    
+    if not os.path.isdir(folder_path):
+        return "No results yet", 404
+    subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]
+    if not subfolders:
+        return "No results yet", 404
     latest_subfolder = max(subfolders, key=lambda x: os.path.getctime(os.path.join(folder_path, x)))    
     directory = folder_path+'/'+latest_subfolder    
     print("printing directory: ",directory) 
