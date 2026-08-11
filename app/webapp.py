@@ -28,6 +28,9 @@ app = Flask(__name__)
 # Load the model once at startup instead of on every request
 model = YOLO('yolov8n.pt')
 
+# Use an absolute path for detection results so it's consistent regardless of working directory
+RUNS_DETECT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runs', 'detect')
+
 
 @app.route("/")
 def hello_world():
@@ -59,7 +62,7 @@ def predict_img():
                     scale = max_dim / max(h, w)
                     img = cv2.resize(img, (int(w * scale), int(h * scale)))
 
-                detections = model(img, save=True, imgsz=640)
+                detections = model(img, save=True, imgsz=640, project=RUNS_DETECT_DIR, name='predict', exist_ok=True)
 
                 # Free memory before returning
                 del img, detections
@@ -100,7 +103,7 @@ def predict_img():
 
 
             
-    folder_path = 'runs/detect'
+    folder_path = RUNS_DETECT_DIR
     subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]    
     latest_subfolder = max(subfolders, key=lambda x: os.path.getctime(os.path.join(folder_path, x)))    
     image_path = folder_path+'/'+latest_subfolder+'/'+f.filename 
@@ -108,7 +111,7 @@ def predict_img():
 
 @app.route('/<path:filename>')
 def display(filename):
-    folder_path = 'runs/detect'
+    folder_path = RUNS_DETECT_DIR
     if not os.path.isdir(folder_path):
         return "No results yet", 404
     subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]
