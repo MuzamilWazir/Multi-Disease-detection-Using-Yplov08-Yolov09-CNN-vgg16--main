@@ -1,6 +1,7 @@
 # 🍑 Multi-Disease Detection in Apricot Fruits using YOLOv8
 
 This project focuses on detecting multiple diseases in apricot fruits using **YOLOv8**, a state-of-the-art object detection model. The dataset was collected and annotated using **Roboflow**, then trained and tested using **Ultralytics YOLOv8** in Python.
+Test it at : https://multi-disease-detection-using-yplov08.onrender.com/
 
 ---
 
