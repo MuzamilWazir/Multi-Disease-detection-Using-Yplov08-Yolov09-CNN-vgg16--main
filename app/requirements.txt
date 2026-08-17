@@ -1,7 +1,7 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 Flask
 gunicorn
-ultralytics
+ultralytics==8.4.116
 opencv-python-headless
 numpy
 Pillow
