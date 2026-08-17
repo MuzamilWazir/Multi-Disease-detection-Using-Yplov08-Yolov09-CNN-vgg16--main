@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block stylesheets %}
+<style>
+  .ld-body { background: var(--l-paper); }
+
+  :root {
+    --l-paper: #FAF7F0;
+    --l-ink: #1E2B20;
+    --l-canopy: #2F5D3A;
+    --l-canopy-deep: #1F4029;
+    --l-canopy-soft: #E7EEE2;
+    --l-apricot: #E0791E;
+    --l-apricot-soft: #FBEADA;
+    --l-rot: #7A4A2E;
+    --l-line: #E1DBC9;
+  }
+
+  .ld-wrap { color: var(--l-ink); background: var(--l-paper); }
+  .ld-serif { font-family: 'Instrument Serif', 'Space Grotesk', serif; }
+  .ld-mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Nav */
+  .ld-nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(250, 247, 240, 0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--l-line);
+  }
+  .ld-nav-brand { display: flex; align-items: center; gap: 10px; }
+  .ld-nav-links { display: flex; align-items: center; gap: 32px; }
+  .ld-nav-links a { font-size: 14px; text-decoration: none; color: var(--l-ink); opacity: 0.75; transition: opacity 0.15s; }
+  .ld-nav-links a:hover { opacity: 1; }
+  .ld-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--l-canopy); color: #fff; text-decoration: none;
+    padding: 11px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .ld-btn:hover { background: var(--l-canopy-deep); transform: translateY(-1px); }
+
+  /* Eyebrow / section label */
+  .ld-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--l-canopy); display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+  }
+  .ld-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--l-canopy); display: inline-block; }
+
+  /* Bounding-box signature frame */
+  .ld-frame { position: relative; border-radius: 12px; overflow: hidden; }
+  .ld-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ld-corner { position: absolute; width: 18px; height: 18px; border-color: var(--l-apricot); opacity: 0.9; }
+  .ld-corner.tl { top: 8px; left: 8px; border-top: 3px solid; border-left: 3px solid; }
+  .ld-corner.tr { top: 8px; right: 8px; border-top: 3px solid; border-right: 3px solid; }
+  .ld-corner.bl { bottom: 8px; left: 8px; border-bottom: 3px solid; border-left: 3px solid; }
+  .ld-corner.br { bottom: 8px; right: 8px; border-bottom: 3px solid; border-right: 3px solid; }
+  .ld-tag {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--l-apricot); color: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+    padding: 4px 9px; border-radius: 4px;
+  }
+
+  /* Hero */
+  .ld-hero {
+    max-width: 1220px; margin: 0 auto; padding: 72px 48px 96px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+  }
+  .ld-hero h1 { font-size: 58px; line-height: 1.04; font-weight: 500; margin: 0 0 22px; }
+  .ld-hero h1 em { font-style: normal; color: var(--l-canopy); }
+  .ld-hero p.ld-sub { font-size: 17px; line-height: 1.6; color: #4B5147; max-width: 480px; margin-bottom: 32px; }
+  .ld-hero-ctas { display: flex; align-items: center; gap: 20px; }
+  .ld-secondary-link { font-size: 14px; font-weight: 600; color: var(--l-ink); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+
+  /* Sections */
+  .ld-section { max-width: 1220px; margin: 0 auto; padding: 88px 48px; }
+  .ld-section.divider { border-top: 1px solid var(--l-line); }
+  .ld-section h2 { font-size: 36px; font-weight: 500; margin: 0 0 18px; max-width: 620px; }
+  .ld-section p.ld-lead { font-size: 16px; line-height: 1.7; color: #4B5147; max-width: 640px; }
+
+  /* Disease cards */
+  .ld-disease-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+  .ld-disease-card { background: #fff; border: 1px solid var(--l-line); border-radius: 14px; overflow: hidden; }
+  .ld-disease-card .ld-frame { height: 220px; }
+  .ld-disease-body { padding: 20px; }
+  .ld-disease-body h3 { font-size: 18px; margin: 0 0 6px; font-weight: 600; }
+  .ld-disease-body p { font-size: 14px; color: #5B6155; line-height: 1.55; margin: 0; }
+
+  /* Methodology */
+  .ld-method { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 40px; }
+  .ld-steps { display: flex; flex-direction: column; gap: 26px; }
+  .ld-step { display: flex; gap: 18px; }
+  .ld-step-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--l-apricot); font-weight: 700; padding-top: 3px; flex-shrink: 0; width: 28px; }
+  .ld-step h4 { font-size: 16px; margin: 0 0 4px; font-weight: 600; }
+  .ld-step p { font-size: 14px; color: #5B6155; margin: 0; line-height: 1.55; }
+
+  /* Results */
+  .ld-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--l-line); border: 1px solid var(--l-line); border-radius: 12px; overflow: hidden; margin-top: 44px; }
+  .ld-stat { background: #fff; padding: 28px 20px; text-align: center; }
+  .ld-stat .ld-num { font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 700; color: var(--l-canopy); }
+  .ld-stat .ld-label { font-size: 12px; color: #6B7168; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  table.ld-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 14px; }
+  table.ld-table th { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: #6B7168; padding: 10px 14px; border-bottom: 2px solid var(--l-ink); }
+  table.ld-table td { padding: 14px; border-bottom: 1px solid var(--l-line); }
+  table.ld-table tr:last-child td { border-bottom: none; }
+  table.ld-table td:first-child { font-weight: 600; }
+  table.ld-table td.ld-num-cell { font-family: 'JetBrains Mono', monospace; }
+
+  /* CTA band */
+  .ld-cta-band {
+    max-width: 1220px; margin: 0 auto 88px; padding: 64px 48px;
+    background: var(--l-canopy); border-radius: 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    color: #fff;
+  }
+  .ld-cta-band h3 { font-size: 30px; font-weight: 500; margin: 0 0 6px; }
+  .ld-cta-band p { margin: 0; opacity: 0.8; font-size: 15px; }
+  .ld-cta-band .ld-btn { background: #fff; color: var(--l-canopy-deep); }
+  .ld-cta-band .ld-btn:hover { background: var(--l-apricot-soft); }
+
+  .ld-footer { max-width: 1220px; margin: 0 auto; padding: 32px 48px 56px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--l-line); font-size: 13px; color: #6B7168; }
+
+  @media (max-width: 900px) {
+    .ld-hero, .ld-method { grid-template-columns: 1fr; }
+    .ld-disease-grid { grid-template-columns: 1fr; }
+    .ld-stat-row { grid-template-columns: repeat(2, 1fr); }
+    .ld-nav-links { display: none; }
+    .ld-hero h1 { font-size: 40px; }
+    .ld-section { padding: 56px 24px; }
+    .ld-hero { padding: 48px 24px 64px; }
+    .ld-cta-band { flex-direction: column; text-align: center; padding: 40px 28px; }
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="ld-wrap">
+
+  <nav class="ld-nav">
+    <div class="ld-nav-brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="13" r="8" fill="var(--l-apricot)"/>
+        <path d="M12 5c0-1.5 1-3 3-3" stroke="var(--l-canopy)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="ld-mono" style="font-size: 13px; font-weight: 600; letter-spacing: 0.02em;">APRICOT.DETECT</span>
+    </div>
+    <div class="ld-nav-links">
+      <a href="#diseases">Diseases</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+    </div>
+    <a href="/detect" class="ld-btn">Try the detector →</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="ld-hero">
+    <div>
+      <h1 class="ld-serif">Catch apricot disease <em>before</em> it spreads.</h1>
+      <p class="ld-sub">A YOLOv8 object detection model trained on a hand-annotated, field-collected dataset — identifying Brown Rot, Shot Hole, and healthy fruit in a single frame, at 95% mAP.</p>
+      <div class="ld-hero-ctas">
+        <a href="/detect" class="ld-btn">Try the live detector →</a>
+        <a href="#results" class="ld-secondary-link">See the results ↓</a>
+      </div>
+    </div>
+    <div class="ld-frame" style="border: 1px solid var(--l-line); box-shadow: 0 20px 50px -20px rgba(30,43,32,0.25);">
+      <img src="{{ url_for('static', filename='img/detectedimage.png') }}" alt="Live detection output on apricot fruit">
+      <span class="ld-corner tl"></span><span class="ld-corner tr"></span>
+      <span class="ld-corner bl"></span><span class="ld-corner br"></span>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="ld-section divider">
+    <div class="ld-eyebrow">The problem</div>
+    <h2 class="ld-serif">Manual inspection doesn't scale.</h2>
+    <p class="ld-lead">Apricots are a valuable cash crop, but disease identification is still done by eye, fruit by fruit. Across large harvests this is slow, inconsistent, and often catches disease only after it has already spread. This project builds an automated alternative — a model that can screen fruit as fast as a camera can see it.</p>
+  </section>
+
+  <!-- Diseases -->
+  <section class="ld-section divider" id="diseases">
+    <div class="ld-eyebrow">What it detects</div>
+    <h2 class="ld-serif">Three classes, trained on real orchard photos.</h2>
+    <p class="ld-lead">Every image in the dataset was collected directly from the field and manually annotated by hand — marking the exact location and class of each fruit before training.</p>
+
+    <div class="ld-disease-grid">
+      <div class="ld-disease-card">
+        <div class="ld-frame">
+          <img src="{{ url_for('static', filename='img/healthy.png') }}" alt="Healthy apricot">
+          <span class="ld-tag" style="background: var(--l-canopy);">HEALTHY · 0.89</span>
+        </div>
+        <div class="ld-disease-body">
+          <h3>Healthy</h3>
+          <p>No visible disease markers — smooth skin, even color, no lesions or fungal growth.</p>
+        </div>
+      </div>
+      <div class="ld-disease-card">
+        <div class="ld-frame">
+          <img src="{{ url_for('static', filename='img/brownrot.png') }}" alt="Brown rot on apricot">
+          <span class="ld-tag" style="background: var(--l-rot);">BROWN_ROT · 0.92</span>
+        </div>
+        <div class="ld-disease-body">
+          <h3>Brown Rot</h3>
+          <p>A fungal infection producing concentric brown lesions, often spreading rapidly across the fruit surface.</p>
+        </div>
+      </div>
+      <div class="ld-disease-card">
+        <div class="ld-frame">
+          <img src="{{ url_for('static', filename='img/shothole.png') }}" alt="Shot hole disease on apricot">
+          <span class="ld-tag">SHOT_HOLE · 0.91</span>
+        </div>
+        <div class="ld-disease-body">
+          <h3>Shot Hole</h3>
+          <p>Small circular lesions that can dry out and drop away, leaving a distinctive perforated pattern.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodology -->
+  <section class="ld-section divider" id="method">
+    <div class="ld-eyebrow">How it works</div>
+    <h2 class="ld-serif">From orchard to model, in four steps.</h2>
+
+    <div class="ld-method">
+      <div class="ld-steps">
+        <div class="ld-step">
+          <div class="ld-step-num">01</div>
+          <div><h4>Field data collection</h4><p>Apricots were photographed directly from the field across varying lighting, angles, and ripeness stages.</p></div>
+        </div>
+        <div class="ld-step">
+          <div class="ld-step-num">02</div>
+          <div><h4>Manual annotation</h4><p>Each image was hand-labeled with bounding boxes marking disease class and location — the ground truth the model learns from.</p></div>
+        </div>
+        <div class="ld-step">
+          <div class="ld-step-num">03</div>
+          <div><h4>Model training</h4><p>A YOLOv8 object detection model was trained on the annotated dataset to localize and classify each condition.</p></div>
+        </div>
+        <div class="ld-step">
+          <div class="ld-step-num">04</div>
+          <div><h4>Comparative evaluation</h4><p>Results were benchmarked against alternative detection approaches, with YOLOv8 achieving the strongest results.</p></div>
+        </div>
+      </div>
+      <div class="ld-frame" style="border: 1px solid var(--l-line);">
+        <img src="{{ url_for('static', filename='img/dataset.png') }}" alt="Sample of annotated apricot dataset">
+        <span class="ld-corner tl"></span><span class="ld-corner tr"></span>
+        <span class="ld-corner bl"></span><span class="ld-corner br"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="ld-section divider" id="results">
+    <div class="ld-eyebrow">Performance</div>
+    <h2 class="ld-serif">State-of-the-art results across all three classes.</h2>
+    <p class="ld-lead">Evaluated on 782 images and 1,153 labeled instances.</p>
+
+    <div class="ld-stat-row">
+      <div class="ld-stat"><div class="ld-num">92.5%</div><div class="ld-label">Precision</div></div>
+      <div class="ld-stat"><div class="ld-num">92.2%</div><div class="ld-label">Recall</div></div>
+      <div class="ld-stat"><div class="ld-num">95.0%</div><div class="ld-label">mAP50</div></div>
+      <div class="ld-stat"><div class="ld-num">79.2%</div><div class="ld-label">mAP75</div></div>
+    </div>
+
+    <table class="ld-table">
+      <thead>
+        <tr><th>Class</th><th>Images</th><th>Instances</th><th>Precision</th><th>Recall</th><th>mAP50</th><th>mAP75</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>All</td><td class="ld-num-cell">782</td><td class="ld-num-cell">1,153</td><td class="ld-num-cell">92.5%</td><td class="ld-num-cell">92.2%</td><td class="ld-num-cell">95.0%</td><td class="ld-num-cell">79.2%</td></tr>
+        <tr><td>Brown Rot</td><td class="ld-num-cell">201</td><td class="ld-num-cell">292</td><td class="ld-num-cell">97.7%</td><td class="ld-num-cell">93.2%</td><td class="ld-num-cell">95.8%</td><td class="ld-num-cell">82.9%</td></tr>
+        <tr><td>Healthy</td><td class="ld-num-cell">174</td><td class="ld-num-cell">253</td><td class="ld-num-cell">89.0%</td><td class="ld-num-cell">89.9%</td><td class="ld-num-cell">95.1%</td><td class="ld-num-cell">80.4%</td></tr>
+        <tr><td>Shot Hole</td><td class="ld-num-cell">407</td><td class="ld-num-cell">608</td><td class="ld-num-cell">90.7%</td><td class="ld-num-cell">93.5%</td><td class="ld-num-cell">94.2%</td><td class="ld-num-cell">74.2%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CTA -->
+  <div class="ld-cta-band">
+    <div>
+      <h3 class="ld-serif">See it detect in real time.</h3>
+      <p>Upload a photo and watch the model do the work.</p>
+    </div>
+    <a href="/detect" class="ld-btn">Try the live detector →</a>
+  </div>
+
+  <footer class="ld-footer">
+    <span>Multi Disease Detection in Apricot Fruit</span>
+    <span class="ld-mono">FINAL YEAR PROJECT · YOLOv8</span>
+  </footer>
+
+</div>
+{% endblock content %}
