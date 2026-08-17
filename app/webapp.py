@@ -34,10 +34,15 @@ RUNS_DETECT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runs
 
 @app.route("/")
 def hello_world():
-    return render_template('index.html')
+    return render_template('landing.html')
 
     
-@app.route("/", methods=["GET", "POST"])
+@app.route("/detect", methods=["GET"])
+def detect_page():
+    return render_template('index.html')
+
+
+@app.route("/detect", methods=["POST"])
 def predict_img():
     if request.method == "POST":
         if 'file' in request.files:
@@ -101,13 +106,7 @@ def predict_img():
 
                 return video_feed()            
 
-
-            
-    folder_path = RUNS_DETECT_DIR
-    subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]    
-    latest_subfolder = max(subfolders, key=lambda x: os.path.getctime(os.path.join(folder_path, x)))    
-    image_path = folder_path+'/'+latest_subfolder+'/'+f.filename 
-    return render_template('index.html', image_path=image_path)
+    return render_template('index.html')
 
 @app.route('/<path:filename>')
 def display(filename):
